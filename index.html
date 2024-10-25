@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/icon-dice.svg"
+    />
+    <title>Advice generator app</title>
+    <style>
+      :root {
+        /*primary*/
+        --Light-Cyan: hsl(193, 38%, 86%);
+        --Neon-Green: hsl(150, 100%, 66%);
+
+        /*Neutral*/
+        --Grayish-Blue: hsl(217, 19%, 38%);
+        --Dark-Grayish-Blue: hsl(217, 19%, 24%);
+        --Dark-Blue: hsl(218, 23%, 16%);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .root {
+        background-color: var(--Dark-Grayish-Blue);
+        display: grid;
+        place-content: center;
+        height: 100vh;
+      }
+      .content-advice {
+        background-color: var(--Grayish-Blue);
+        border-radius: 20px;
+        width: 650px;
+        display: grid;
+        place-content: center;
+        padding: 20px 15px;
+        position: relative;
+      }
+      .advice-id {
+        text-align: center;
+        font-size: 25px;
+        color: var(--Neon-Green);
+        font-weight: 800;
+      }
+      .advice-text {
+        font-size: 34px;
+        padding: 25px 0;
+        text-wrap: balance;
+        text-align: center;
+      }
+
+      .icon-dice {
+        position: absolute;
+        background-color: var(--Neon-Green);
+        bottom: 0;
+        left: 50%;
+        right: 50%;
+        transform: translate(-50%, 50%);
+        width: 50px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 999px;
+        cursor: pointer;
+        img {
+          width: 20px;
+          height: 20px;
+        }
+        
+      }
+      .icon-dice:hover{
+          box-shadow:  0px  0px 28px 5px var(--Neon-Green);
+        }
+    </style>
+    <script type="module">
+      let adviceId = document.querySelector(".advice-id");
+      let adviceText = document.querySelector(".advice-text");
+      const btnAdvice = document.querySelector(".icon-dice");
+      const API_URL = "https://api.adviceslip.com/advice";
+
+      async function getApi() {
+        try {
+          const response = await fetch(API_URL);
+          const data = await response.json();
+          const { id, advice } = data.slip;
+          adviceId.innerHTML = `# ${id}`;
+          adviceText.innerHTML = `"${advice}"`;
+        } catch (error) {
+          console.error("Error", error);
+        }
+      }
+
+      btnAdvice.addEventListener("click", () => {
+        getApi();
+      });
+
+      getApi();
+    </script>
+  </head>
+  <body>
+    <div class="root">
+      <div class="content-advice">
+        <p class="advice-id">Advice #12</p>
+        <p class="advice-text"></p>
+        <div class="icon-dice">
+          <img src="./images/icon-dice.svg" alt="Icon dice." />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
